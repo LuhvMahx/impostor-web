@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Impostor Word Game</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="bg">
+    <div class="stars"></div>
+    <div class="container">
+
+      <!-- Top ad placeholder -->
+      <div class="ad top">Ad Space</div>
+
+      <!-- HOME -->
+      <section id="screen-home" class="screen">
+        <h1 class="title">Impostor</h1>
+        <p class="sub">Chromebook-friendly word impostor game.</p>
+
+        <div class="card">
+          <label class="label">Your name</label>
+          <div class="row">
+            <input id="nameInput" class="input" placeholder="Enter a name (or play as Guest)" maxlength="18" />
+            <button id="guestBtn" class="btn ghost">Guest</button>
+          </div>
+
+          <div class="row mt">
+            <button id="hostBtn" class="btn primary">Host Game</button>
+            <button id="joinBtn" class="btn">Join Game</button>
+          </div>
+
+          <div id="joinRow" class="row mt hidden">
+            <input id="codeInput" class="input" placeholder="Room code (ex: 8FJ2KQ)" maxlength="6" />
+            <button id="joinConfirmBtn" class="btn primary">Join</button>
+          </div>
+
+          <p id="homeError" class="error hidden"></p>
+        </div>
+      </section>
+
+      <!-- LOBBY -->
+      <section id="screen-lobby" class="screen hidden">
+        <div class="headerRow">
+          <div>
+            <h2 class="h2">Lobby</h2>
+            <div class="pill">Room: <span id="roomCodeLabel"></span></div>
+          </div>
+          <div class="right">
+            <button id="leaveBtn" class="btn danger">Leave</button>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="card">
+            <h3 class="h3">Players</h3>
+            <div id="playersList" class="list"></div>
+          </div>
+
+          <div class="card">
+            <h3 class="h3">Game Settings</h3>
+
+            <div class="row">
+              <div class="field">
+                <label class="label">Category</label>
+                <select id="categorySelect" class="input">
+                  <option>Food</option>
+                  <option>Animals</option>
+                  <option>Objects</option>
+                  <option>Movies</option>
+                  <option>Locations</option>
+                  <option>Sports</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label class="label">Imposters</label>
+                <input id="impostersInput" class="input" type="number" min="1" max="5" value="1" />
+              </div>
+            </div>
+
+            <div class="row mt">
+              <label class="toggle">
+                <input id="showCategoryToggle" type="checkbox" checked />
+                <span>Show category to impostor</span>
+              </label>
+              <label class="toggle">
+                <input id="showHintToggle" type="checkbox" checked />
+                <span>Show hint to impostor</span>
+              </label>
+            </div>
+
+            <div class="row mt">
+              <button id="startBtn" class="btn primary full" disabled>Start Game</button>
+            </div>
+
+            <p class="muted mt">Host can kick players. Minimum 3 players.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- WORD REVEAL -->
+      <section id="screen-word" class="screen hidden">
+        <h2 class="h2 center">Your Card</h2>
+
+        <div class="card big center">
+          <p class="muted">Category: <span id="roleCategory">—</span></p>
+
+          <div id="roleBox" class="roleBox">
+            <div id="roleMain" class="roleMain">—</div>
+          </div>
+
+          <div id="hintBox" class="hintBox hidden">
+            <div class="hintTitle">Your clue</div>
+            <div id="hintText" class="hintText">—</div>
+            <div class="muted">Use this in the first round to blend in.</div>
+          </div>
+
+          <button id="readyBtn" class="btn primary full mt">Ready</button>
+          <p class="muted mt">Everyone must press Ready to continue.</p>
+        </div>
+      </section>
+
+      <!-- STEPS -->
+      <section id="screen-steps" class="screen hidden">
+        <div class="headerRow">
+          <h2 class="h2">Voting Phase</h2>
+          <button id="endBtn" class="btn danger">End Game</button>
+        </div>
+
+        <p class="sub">Time to discuss and vote for the impostor.</p>
+
+        <div class="card">
+          <h3 class="h3">How to Vote</h3>
+
+          <div class="step">
+            <div class="badge">1</div>
+            <div>
+              <div class="stepTitle">Starting Player</div>
+              <div class="muted" id="startingPlayerLine">—</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="badge">2</div>
+            <div>
+              <div class="stepTitle">Group Discussion</div>
+              <div class="muted">Go clockwise. Each person says ONE clue.</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="badge">3</div>
+            <div>
+              <div class="stepTitle">Vote Time</div>
+              <div class="muted">Go around 2–3 times. Then vote.</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="badge">4</div>
+            <div>
+              <div class="stepTitle">Reveal Phase</div>
+              <div class="muted">After everyone votes, reveal results.</div>
+            </div>
+          </div>
+
+          <button id="goVoteBtn" class="btn primary full mt">Go to Voting</button>
+        </div>
+      </section>
+
+      <!-- VOTING -->
+      <section id="screen-vote" class="screen hidden">
+        <div class="headerRow">
+          <h2 class="h2">Vote</h2>
+          <button id="endBtn2" class="btn danger">End Game</button>
+        </div>
+
+        <div class="card">
+          <p class="muted">Pick who you think is the impostor.</p>
+          <div id="voteList" class="voteGrid"></div>
+          <p id="voteStatus" class="muted mt">Waiting…</p>
+        </div>
+      </section>
+
+      <!-- RESULTS -->
+      <section id="screen-results" class="screen hidden">
+        <h2 class="h2 center">Results</h2>
+
+        <div class="card big center">
+          <div class="muted">Secret Word</div>
+          <div id="secretWord" class="bigWord">—</div>
+
+          <div class="muted mt">Impostor(s)</div>
+          <div id="impostorNames" class="bigRed">—</div>
+
+          <div class="mt">
+            <button id="playAgainBtn" class="btn primary full">Back to Lobby</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom ad placeholder -->
+      <div class="ad bottom">Ad Space</div>
+
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
